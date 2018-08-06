@@ -1,0 +1,28 @@
+.base {
+  fill: #FFF;
+  stroke: #AAA;
+  stroke-width: 8;
+}
+
+.town {
+  fill: #AAA;
+  stroke: None;
+}
+
+.county {
+  fill: None;
+  stroke: #000;
+  stroke-width: 16;
+}
+
+{__red__} {
+  fill: red;
+}
+
+{__orange__} {
+  fill: orange;
+}
+
+{__yellow__} {
+  fill: yellow;
+}
