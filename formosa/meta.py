@@ -18,8 +18,6 @@ NS = {
     'gml': 'http://www.opengis.net/gml',
 }
 
-CANVAS = (4000, 4000)
-
 FILTERS = [
     (lambda name: '金門縣' in name, 'Kinmen'),
     (lambda name: '連江縣' in name, 'Matsu'),
@@ -31,37 +29,37 @@ FILTERS = [
 GROUPS = {
     'main': {
         'position': (0, 0),
-        'size': (4000, 4000),
+        'size': (1, 1),
         'border': (118.6, 120.6, 21.7, 25.5),
         'skip': 16,
     },
     'Penghu': {
-        'position': (80, 2200),
-        'size': (1200, 900),
+        'position': (0.02, 0.55),
+        'size': (0.3, 0.225),
         'border': (119.38, 119.5, 23.4, 23.7),
         'skip': 4,
     },
     'Kinmen': {
-        'position': (80, 1140),
-        'size': (1200, 900),
+        'position': (0.02, 0.285),
+        'size': (0.3, 0.225),
         'border': (118, 118.5, 24.25, 24.4),
         'skip': 4,
     },
     'Matsu': {
-        'position': (80, 80),
-        'size': (1200, 900),
+        'position': (0.02, 0.02),
+        'size': (0.3, 0.225),
         'border': (119.8, 119.95, 26.1, 26.3),
         'skip': 4,
     },
     'Ludao': {
-        'position': (3120, 2560),
-        'size': (800, 600),
+        'position': (0.78, 0.64),
+        'size': (0.2, 0.15),
         'border': (121.45, 121.52, 22.61, 22.69),
         'skip': 4,
     },
     'Lanyu': {
-        'position': (3120, 3320),
-        'size': (800, 600),
+        'position': (0.78, 0.83),
+        'size': (0.2, 0.15),
         'border': (121.49, 121.62, 21.94, 22.09),
         'skip': 4,
     },

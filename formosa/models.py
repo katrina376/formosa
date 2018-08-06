@@ -44,7 +44,14 @@ class Box:
             raise TypeError('`border` should be a tuple with the length of 4.')
 
         self.name = name
-        self.size = size
+        self.size = (
+            size[0] * self.dwg['width'],
+            size[1] * self.dwg['height'],
+        )
+        self.position = (
+            position[0] * self.dwg['width'],
+            position[1] * self.dwg['height'],
+        )
         self.border = border
         self.skip = skip
 
@@ -55,15 +62,15 @@ class Box:
                 id='clip-' + name
             )
         )
-        self.clip.add(self.dwg.rect(size=size))
+        self.clip.add(self.dwg.rect(size=self.size))
 
         self.g = self.dwg.g(
             id='group-' + name,
         )
-        self.g.translate(*position)
+        self.g.translate(*self.position)
         self.g.add(
             self.dwg.rect(
-                size=size,
+                size=self.size,
                 id='rect-' + name,
                 class_='base'
             )
@@ -81,7 +88,7 @@ class Box:
                 points,
                 code=code,
                 class_=kind,
-                clip_path='url(#{})'.format('clip-' + self.name)
+                clip_path='url(#clip-{})'.format(self.name)
             )
         )
 

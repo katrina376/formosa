@@ -3,11 +3,11 @@ import svgwrite
 from xml.etree import ElementTree as et
 
 from .models import Box, District
-from .meta import STYLEPATH, GMLPATH, NS, CANVAS, GROUPS
+from .meta import STYLEPATH, GMLPATH, NS, GROUPS
 
 
-def create(output='template.svg', stylesheet=STYLEPATH):
-    dwg = svgwrite.Drawing(output, size=CANVAS, debug=False)
+def create(output='template.svg', size=(2000, 2000), stylesheet=STYLEPATH):
+    dwg = svgwrite.Drawing(output, size=size, debug=False)
 
     with open(stylesheet, 'r') as f:
         dwg.add(
