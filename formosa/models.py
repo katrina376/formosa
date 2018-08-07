@@ -27,7 +27,7 @@ class District:
 class Box:
     dwg = None
 
-    def __init__(self, name, position, size, border, skip=4, reverse=False):
+    def __init__(self, name, position, size):
         if self.dwg is None:
             raise ValueError('`dwg` should be set.')
 
@@ -40,10 +40,8 @@ class Box:
         if type(size) is not tuple or len(size) != 2:
             raise TypeError('`size` should be a tuple with the length of 2.')
 
-        if type(border) is not tuple or len(border) != 4:
-            raise TypeError('`border` should be a tuple with the length of 4.')
-
         self.name = name
+
         self.size = (
             size[0] * self.dwg['width'],
             size[1] * self.dwg['height'],
@@ -52,17 +50,6 @@ class Box:
             position[0] * self.dwg['width'],
             position[1] * self.dwg['height'],
         )
-        self.border = border
-        self.skip = skip
-
-        self.reverse = reverse
-
-        self.clip = self.dwg.defs.add(
-            self.dwg.clipPath(
-                id='clip-' + name
-            )
-        )
-        self.clip.add(self.dwg.rect(size=self.size))
 
         self.g = self.dwg.g(
             id='group-' + name,
@@ -72,10 +59,46 @@ class Box:
             self.dwg.rect(
                 size=self.size,
                 id='rect-' + name,
-                class_='base'
+                class_='mapbox-base'
             )
         )
+
         self.dwg.add(self.g)
+
+class MapBox(Box):
+    def __init__(self, name, position, size, border, skip, display_name):
+        super(MapBox, self).__init__(name, position, size)
+
+        if type(display_name) is not str:
+            raise TypeError('`display_name` should be a string.')
+
+        if type(position) is not tuple or len(position) != 2:
+            raise TypeError('`position` should be a tuple with the length of 2.')
+
+        if type(size) is not tuple or len(size) != 2:
+            raise TypeError('`size` should be a tuple with the length of 2.')
+
+        self.display_name = display_name
+
+        self.border = border
+        self.skip = skip
+
+        self.clip = self.dwg.defs.add(
+            self.dwg.clipPath(
+                id='clip-' + name
+            )
+        )
+        self.clip.add(self.dwg.rect(size=self.size))
+
+        padding = self.dwg['width'] * 0.02
+        self.g.add(
+            self.dwg.text(
+                self.display_name,
+                insert=(self.size[0] - padding, self.size[1] - padding),
+                text_anchor='end',
+                class_='mapbox-name',
+            )
+        )
 
     def add_polygon(self, code, coordinates, kind):
         points = self._remap([

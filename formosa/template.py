@@ -2,7 +2,7 @@ import svgwrite
 
 from xml.etree import ElementTree as et
 
-from .models import Box, District
+from .models import Box, MapBox, District
 from .meta import STYLEPATH, GMLPATH, NS, GROUPS
 
 
@@ -18,7 +18,7 @@ def create(output='template.svg', size=(2000, 2000), stylesheet=STYLEPATH):
     # use static variable for singleton
 
     boxes = {
-        name: Box(
+        name: MapBox(
             name,
             **{k:v for k, v in group.items()})
         for name, group in GROUPS.items()
