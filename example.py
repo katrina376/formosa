@@ -1,9 +1,23 @@
+import csv
+
 from formosa import template
 from formosa.color import color
 
 
+template = 'test.svg'
+
 # Create template map
-template.create('test.svg', (2000, 2000))
+template.create(template, (1040, 1040))
 
 # Color the template map using the list of districts
-color('demo/test.csv', 'test.svg', 'test_color.svg')
+with open('demo/color_by_name.csv', 'r') as csvfile:
+    data = [row for row in csv.DictReader(csvfile)]
+    color(data, template, 'test_by_name.svg')
+
+with open('demo/color_by_hex.csv', 'r') as csvfile:
+    data = [row for row in csv.DictReader(csvfile)]
+    color(data, template, 'test_by_hex.svg', 'hex')
+
+with open('demo/color_by_rgb.csv', 'r') as csvfile:
+    data = [row for row in csv.DictReader(csvfile)]
+    color(data, template, 'test_by_rgb.svg', 'rgb')
