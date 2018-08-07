@@ -10,9 +10,7 @@ def create(output='template.svg', size=(2000, 2000), stylesheet=STYLEPATH):
     dwg = svgwrite.Drawing(output, size=size, debug=False)
 
     with open(stylesheet, 'r') as f:
-        dwg.add(
-            dwg.style(f.read())
-        )
+        dwg.add(dwg.style(f.read() + '{{__EXTENSION__}}'))
 
     Box.dwg = dwg
     # use static variable for singleton

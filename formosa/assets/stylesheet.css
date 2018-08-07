@@ -1,28 +1,30 @@
-.base {
+.mapbox-base {
   fill: #FFF;
   stroke: #AAA;
-  stroke-width: 8;
+  stroke-width: 4;
 }
 
-.town {
-  fill: #AAA;
+.mapbox-name {
+  font-family: sans-serif;
+  font-size: 32px;
+}
+
+.legend-color {
+  stroke: #AAA
+}
+
+.legend-text {
+  font-family: sans-serif;
+  font-size: 24px;
+}
+
+.area {
+  fill: #F3F3F3;
   stroke: None;
 }
 
-.county {
+.border {
   fill: None;
   stroke: #000;
-  stroke-width: 16;
-}
-
-{__red__} {
-  fill: red;
-}
-
-{__orange__} {
-  fill: orange;
-}
-
-{__yellow__} {
-  fill: yellow;
+  stroke-width: 2;
 }
