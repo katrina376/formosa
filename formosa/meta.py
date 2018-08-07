@@ -4,8 +4,8 @@ import os
 ASSET_ROOT = os.path.join(os.path.dirname(__file__), 'assets')
 
 GMLFILES = {
-    'county': 'COUNTY_MOI_1060503',
-    'town': 'TOWN_MOI_1060503',
+    'border': 'COUNTY_MOI_1060503',
+    'area': 'TOWN_MOI_1060503',
 }
 
 GMLPATH = {
