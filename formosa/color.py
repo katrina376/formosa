@@ -4,7 +4,7 @@ color_syntax = {
     'name': '{}',
 }
 
-def color(data, path='template.svg', output='output.svg', mode='name'):
+def color(data, path, output, mode='name'):
     color_lists = {}
 
     for d in data:
