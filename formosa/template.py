@@ -3,10 +3,13 @@ import svgwrite
 from xml.etree import ElementTree as et
 
 from .models import Box, MapBox, District
-from .meta import STYLEPATH, GMLPATH, NS, GROUPS
+from .meta import STYLEPATH, NS, GROUPS
 
 
-def create(output='template.svg', size=(2000, 2000), stylesheet=STYLEPATH):
+def create(output, area, border=None, size=(2000, 2000), stylesheet=STYLEPATH, groups=GROUPS):
+    if border is None:
+        border = area
+    
     dwg = svgwrite.Drawing(output, size=size, profile='tiny', debug=False)
 
     with open(stylesheet, 'r') as f:
@@ -19,18 +22,18 @@ def create(output='template.svg', size=(2000, 2000), stylesheet=STYLEPATH):
         name: MapBox(
             name,
             **{k:v for k, v in group.items()})
-        for name, group in GROUPS.items()
+        for name, group in groups.items()
     }
 
     area_coords = {}
 
-    for ft in parse_features(GMLPATH.get('area')):
+    for ft in parse_features(area):
         dst = District(ft)
         for coord in dst.coordinates:
             boxes.get(dst.box_name).add_polygon(dst.code, coord, 'area')
             area_coords.update({coord: dst.box_name})
 
-    for ft in parse_features(GMLPATH.get('border')):
+    for ft in parse_features(border):
         dst = District(ft)
         for coord in dst.coordinates:
             reassign_box_name = area_coords.get(coord, dst.box_name)
@@ -41,6 +44,7 @@ def create(output='template.svg', size=(2000, 2000), stylesheet=STYLEPATH):
             boxes.get(reassign_box_name).add_polygon(dst.code, coord, 'border')
 
     dwg.save()
+
 
 def parse_features(path):
     tree = et.parse(path)
