@@ -10,7 +10,7 @@ NS = {
     'gml': 'http://www.opengis.net/gml',
 }
 
-ASIGN_RULES = [
+ASSIGN_RULES = [
     (lambda name: '金門縣' in name, 'Kinmen'),
     (lambda name: '連江縣' in name, 'Matsu'),
     (lambda name: '澎湖縣' in name, 'Penghu'),

@@ -1,4 +1,4 @@
-from .meta import NS, ASIGN_RULES
+from .meta import NS, ASSIGN_RULES
 
 
 class District:
@@ -9,7 +9,7 @@ class District:
         self.name = region.find('pub:名稱', NS).text
 
         self.box_name = (
-            [key for func, key in ASIGN_RULES if func(self.name)] + ['main']
+            [key for func, key in ASSIGN_RULES if func(self.name)] + ['main']
         )[0]
 
         area = region.find('pub:涵蓋範圍', NS)
