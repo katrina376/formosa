@@ -41,7 +41,7 @@ def color(data, path, output, mode='name', options={}):
             for color, codes in color_lists.items()
         ])
     
-    template = template.replace('{{__EXTENSION__}}', style)
+    template = template.replace('#__extension_anchor {}', style)
     
     replace = options.pop('replace', [])
     

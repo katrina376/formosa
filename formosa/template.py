@@ -13,7 +13,7 @@ def create(output, area, border=None, size=(2000, 2000), stylesheet=STYLEPATH, g
     dwg = svgwrite.Drawing(output, size=size, profile='tiny', debug=False)
 
     with open(stylesheet, 'r') as f:
-        dwg.add(dwg.style(f.read() + '{{__EXTENSION__}}'))
+        dwg.add(dwg.style(f.read() + '#__extension_anchor {}'))
 
     Box.dwg = dwg
     # use static variable for singleton
