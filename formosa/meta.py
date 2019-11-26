@@ -3,14 +3,6 @@ import os
 
 ASSET_ROOT = os.path.join(os.path.dirname(__file__), 'assets')
 
-GMLFILES = {
-    'border': 'COUNTY_MOI_1060503',
-    'area': 'TOWN_MOI_1060503',
-}
-
-GMLPATH = {
-    k: os.path.join(ASSET_ROOT, n + '.gml') for k, n in GMLFILES.items()}
-
 STYLEPATH = os.path.join(ASSET_ROOT, 'stylesheet.css')
 
 NS = {
