@@ -1,10 +1,9 @@
 import svgwrite
 
 import os.path
-from xml.etree import ElementTree as et
 
-from .models import Box, MapBox, District
-from .meta import STYLEPATH, NS, GROUPS
+from .models import parse_features, Box, MapBox, District
+from .meta import STYLEPATH, GROUPS
 
 
 def create(output, area, border=None, size=(2000, 2000), stylesheet=STYLEPATH, groups=GROUPS):
@@ -51,10 +50,3 @@ def create(output, area, border=None, size=(2000, 2000), stylesheet=STYLEPATH, g
             boxes.get(reassign_box_name).add_polygon(dst.code, coord, 'border')
 
     dwg.save()
-
-
-def parse_features(path):
-    tree = et.parse(path)
-    root = tree.getroot()
-
-    return root.findall('gml:featureMember', NS)

@@ -1,4 +1,13 @@
+from xml.etree import ElementTree as et
+
 from .meta import NS, ASSIGN_RULES
+
+
+def parse_features(path):
+    tree = et.parse(path)
+    root = tree.getroot()
+
+    return root.findall('gml:featureMember', NS)
 
 
 class District:
@@ -64,6 +73,7 @@ class Box:
         )
 
         self.dwg.add(self.g)
+
 
 class MapBox(Box):
     def __init__(self, name, position, size, border, skip, display_name):
