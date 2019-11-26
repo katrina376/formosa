@@ -1,5 +1,6 @@
 import svgwrite
 
+import os.path
 from xml.etree import ElementTree as et
 
 from .models import Box, MapBox, District
@@ -9,6 +10,12 @@ from .meta import STYLEPATH, NS, GROUPS
 def create(output, area, border=None, size=(2000, 2000), stylesheet=STYLEPATH, groups=GROUPS):
     if border is None:
         border = area
+    
+    if not os.path.isfile(area):
+        raise FileNotFoundError(f'Area GML path is not a regular file: {area}')
+    
+    if not os.path.isfile(border):
+        raise FileNotFoundError(f'Border GML path is not a regular file: {border}')
     
     dwg = svgwrite.Drawing(output, size=size, profile='tiny', debug=False)
 
