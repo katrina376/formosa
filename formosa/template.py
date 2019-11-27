@@ -15,10 +15,10 @@ def create(output, area, border=None, size=(2000, 2000), **options):
         border = area
     
     if not os.path.isfile(area):
-        raise FileNotFoundError(f'Area GML path is not a regular file: {area}')
+        raise FileNotFoundError(f'Area path is not a regular file: {area}')
     
     if not os.path.isfile(border):
-        raise FileNotFoundError(f'Border GML path is not a regular file: {border}')
+        raise FileNotFoundError(f'Border path is not a regular file: {border}')
     
     dwg = svgwrite.Drawing(output, size=size, profile='tiny', debug=False)
 
@@ -37,14 +37,14 @@ def create(output, area, border=None, size=(2000, 2000), **options):
 
     area_coords = {}
     
-    area_districts = District.from_gml(area, assign_rules)
+    area_districts = District.from_file(area, assign_rules)
     
     for dst in area_districts:
         for coord in dst.coordinates:
             boxes.get(dst.box_name).add_polygon(dst.code, coord, 'area')
             area_coords.update({coord: dst.box_name})
     
-    border_districts = District.from_gml(border, assign_rules)
+    border_districts = District.from_file(border, assign_rules)
         
     for dst in border_districts:
         for coord in dst.coordinates:

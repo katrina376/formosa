@@ -5,7 +5,27 @@ import shapefile
 from .meta import NS
 
 
+class ProcessFileError(Exception):
+    def __init__(self, fp):
+        message = f'Cannot process file as GML or SHP: {fp}'
+        super(Exception, self).__init__(message)
+
+
 class District:
+    @classmethod
+    def from_file(cls, fp, assign_rules=[]):
+        try:
+            tree = et.parse(fp)
+            return cls.from_gml(fp, assign_rules)
+        except et.ParseError:
+            pass
+        
+        try:
+            with shapefile.Reader(fp):
+                return cls.from_shp(fp, assign_rules)
+        except:
+            raise ProcessFileError(fp)
+        
     @classmethod
     def from_gml(cls, fp, assign_rules=[]):
         tree = et.parse(fp)
