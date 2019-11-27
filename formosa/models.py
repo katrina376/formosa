@@ -1,5 +1,7 @@
 from xml.etree import ElementTree as et
 
+import shapefile
+
 from .meta import NS, ASSIGN_RULES
 
 
@@ -33,6 +35,27 @@ class District:
                 for line in members
             ]
             
+            yield cls(code, name, coordinates)
+    
+    @classmethod
+    def from_shp(cls, fp):
+        with shapefile.Reader(fp) as sf:
+            srs = sf.shapeRecords()
+
+        for s in srs:
+            if hasattr(s.record, 'TOWNCODE'):
+                code = s.record.TOWNCODE
+                name = f'{s.record.COUNTYNAME}{s.record.TOWNNAME}'
+            else:
+                code = s.record.COUNTYCODE
+                name = s.record.COUNTYNAME
+
+            coordinates = []
+
+            for idx, start in enumerate(s.shape.parts):
+                end = s.shape.parts[idx + 1] if idx + 1 < len(s.shape.parts) else None
+                coordinates.append(tuple(s.shape.points[start:end]))
+
             yield cls(code, name, coordinates)
     
     def __init__(self, code, name, coordinates):
