@@ -3,10 +3,14 @@ import svgwrite
 import os.path
 
 from .models import Box, MapBox, District
-from .meta import STYLEPATH, GROUPS
+from .meta import STYLEPATH, GROUPS, ASSIGN_RULES
 
 
-def create(output, area, border=None, size=(2000, 2000), stylesheet=STYLEPATH, groups=GROUPS):
+def create(output, area, border=None, size=(2000, 2000), **options):
+    stylesheet = options.get('stylesheet', STYLEPATH)
+    groups = options.get('groups', GROUPS)
+    assign_rules = options.get('assign_rules', ASSIGN_RULES)
+    
     if border is None:
         border = area
     
@@ -33,14 +37,14 @@ def create(output, area, border=None, size=(2000, 2000), stylesheet=STYLEPATH, g
 
     area_coords = {}
     
-    area_districts = District.from_gml(area)
+    area_districts = District.from_gml(area, assign_rules)
     
     for dst in area_districts:
         for coord in dst.coordinates:
             boxes.get(dst.box_name).add_polygon(dst.code, coord, 'area')
             area_coords.update({coord: dst.box_name})
     
-    border_districts = District.from_gml(border)
+    border_districts = District.from_gml(border, assign_rules)
         
     for dst in border_districts:
         for coord in dst.coordinates:

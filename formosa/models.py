@@ -2,12 +2,12 @@ from xml.etree import ElementTree as et
 
 import shapefile
 
-from .meta import NS, ASSIGN_RULES
+from .meta import NS
 
 
 class District:
     @classmethod
-    def from_gml(cls, fp):
+    def from_gml(cls, fp, assign_rules=[]):
         tree = et.parse(fp)
         root = tree.getroot()
         nodes = root.findall('gml:featureMember', NS)
@@ -35,10 +35,10 @@ class District:
                 for line in members
             ]
             
-            yield cls(code, name, coordinates)
+            yield cls(code, name, coordinates, assign_rules)
     
     @classmethod
-    def from_shp(cls, fp):
+    def from_shp(cls, fp, assign_rules=[]):
         with shapefile.Reader(fp) as sf:
             srs = sf.shapeRecords()
 
@@ -56,15 +56,15 @@ class District:
                 end = s.shape.parts[idx + 1] if idx + 1 < len(s.shape.parts) else None
                 coordinates.append(tuple(s.shape.points[start:end]))
 
-            yield cls(code, name, coordinates)
+            yield cls(code, name, coordinates, assign_rules)
     
-    def __init__(self, code, name, coordinates):
+    def __init__(self, code, name, coordinates, assign_rules=[]):
         self.code = code
         self.name = name
         self.coordinates = coordinates
         
         self.box_name = (
-            [key for func, key in ASSIGN_RULES if func(self.name)] + ['main']
+            [key for func, key in assign_rules if func(self.name)] + ['main']
         )[0]
         
 
