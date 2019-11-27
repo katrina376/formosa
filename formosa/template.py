@@ -6,6 +6,24 @@ from .models import Box, MapBox, District
 from .meta import STYLEPATH, GROUPS, ASSIGN_RULES
 
 
+def create_from_obj(output, config):
+    if not hasattr(config, 'AREA_GMLPATH'):
+        raise ValueError('AREA_GMLPATH is not set.')
+    else:
+        area = config.AREA_GMLPATH
+    
+    border = getattr(config, 'BORDER_GMLPATH', area)
+    size = getattr(config, 'SIZE', (2000, 2000))
+    
+    options = {
+        'stylesheet': getattr(config, 'STYLEPATH', STYLEPATH),
+        'groups': getattr(config, 'GROUPS', GROUPS),
+        'assign_rules': getattr(config, 'ASSIGN_RULES', ASSIGN_RULES),
+    }
+    
+    return create(output, area, border, size, **options)
+
+
 def create(output, area, border=None, size=(2000, 2000), **options):
     stylesheet = options.get('stylesheet', STYLEPATH)
     groups = options.get('groups', GROUPS)
