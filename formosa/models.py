@@ -26,7 +26,10 @@ class District:
             ]
             
             coordinates = [
-                tuple(tuple(coor.split(',')) for coor in line.split(' '))
+                tuple(
+                    tuple(float(s) for s in coor.split(','))
+                    for coor in line.split(' ')
+                )
                 for line in members
             ]
             
@@ -140,8 +143,8 @@ class MapBox(Box):
 
         s = min(width / (xmax - xmin), height / (ymax - ymin))
 
-        nx = (float(x) - xmin) * s
-        ny = height + (- float(y) + ymin) * s
+        nx = (x - xmin) * s
+        ny = height + (- y + ymin) * s
 
         return nx, ny
 
