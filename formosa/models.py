@@ -147,12 +147,12 @@ class MapBox(Box):
 
     def _remap(self, points):
         fx, fy = points[0]
-        npoints = [(round(fx,1), round(fy,1))]
+        npoints = [(round(fx, 1), round(fy, 1))]
 
         for idx in range(1, len(points)):
             px, py = npoints[-1]
             x, y = points[idx]
-            if round(px,1) != round(x,1) or round(py,1) != round(y,1):
-                npoints.append((round(x,1), round(y,1)))
+            if round(px, 1) != round(x, 1) or round(py, 1) != round(y, 1):
+                npoints.append((round(x, 1), round(y, 1)))
 
         return npoints
