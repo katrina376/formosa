@@ -2,7 +2,7 @@ import svgwrite
 
 import os.path
 
-from .models import parse_features, Box, MapBox, District
+from .models import Box, MapBox, District
 from .meta import STYLEPATH, GROUPS
 
 
@@ -32,15 +32,17 @@ def create(output, area, border=None, size=(2000, 2000), stylesheet=STYLEPATH, g
     }
 
     area_coords = {}
-
-    for ft in parse_features(area):
-        dst = District(ft)
+    
+    area_districts = District.from_gml(area)
+    
+    for dst in area_districts:
         for coord in dst.coordinates:
             boxes.get(dst.box_name).add_polygon(dst.code, coord, 'area')
             area_coords.update({coord: dst.box_name})
-
-    for ft in parse_features(border):
-        dst = District(ft)
+    
+    border_districts = District.from_gml(border)
+        
+    for dst in border_districts:
         for coord in dst.coordinates:
             reassign_box_name = area_coords.get(coord, dst.box_name)
             # specialization for Ludao and Lanyu;

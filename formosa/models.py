@@ -3,35 +3,44 @@ from xml.etree import ElementTree as et
 from .meta import NS, ASSIGN_RULES
 
 
-def parse_features(path):
-    tree = et.parse(path)
-    root = tree.getroot()
-
-    return root.findall('gml:featureMember', NS)
-
-
 class District:
-    def __init__(self, node):
-        region = node.find('pub:PUB_行政區域', NS)
+    @classmethod
+    def from_gml(cls, fp):
+        tree = et.parse(fp)
+        root = tree.getroot()
+        nodes = root.findall('gml:featureMember', NS)
+        
+        for node in nodes:
+            region = node.find('pub:PUB_行政區域', NS)
 
-        self.code = region.find('pub:行政區域代碼', NS).text
-        self.name = region.find('pub:名稱', NS).text
+            code = region.find('pub:行政區域代碼', NS).text
+            name = region.find('pub:名稱', NS).text
 
+            area = region.find('pub:涵蓋範圍', NS)
+            members = [
+                m.find(
+                    'gml:Polygon/gml:outerBoundaryIs/gml:LinearRing/gml:coordinates',
+                    NS,
+                ).text
+                for m in area.findall('gml:MultiPolygon/gml:polygonMember', NS)
+            ]
+            
+            coordinates = [
+                tuple(tuple(coor.split(',')) for coor in line.split(' '))
+                for line in members
+            ]
+            
+            yield cls(code, name, coordinates)
+    
+    def __init__(self, code, name, coordinates):
+        self.code = code
+        self.name = name
+        self.coordinates = coordinates
+        
         self.box_name = (
             [key for func, key in ASSIGN_RULES if func(self.name)] + ['main']
         )[0]
-
-        area = region.find('pub:涵蓋範圍', NS)
-        members = area.findall('gml:MultiPolygon/gml:polygonMember', NS)
-
-        self.coordinates = [
-            m.find(
-                'gml:Polygon/gml:outerBoundaryIs/gml:LinearRing/gml:coordinates',
-                NS,
-            ).text
-            for m in members
-        ]
-
+        
 
 class Box:
     dwg = None
@@ -112,8 +121,8 @@ class MapBox(Box):
 
     def add_polygon(self, code, coordinates, kind):
         points = self._remap([
-            self._scale(*p.split(','))
-            for idx, p in enumerate(coordinates.split(' '))
+            self._scale(*p)
+            for idx, p in enumerate(coordinates)
             if idx % self.skip == 0
         ])
         self.g.add(
