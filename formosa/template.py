@@ -7,12 +7,12 @@ from .meta import STYLEPATH, GROUPS, ASSIGN_RULES
 
 
 def create_from_obj(output, config):
-    if not hasattr(config, 'AREA_GMLPATH'):
-        raise ValueError('AREA_GMLPATH is not set.')
+    if not hasattr(config, 'AREA_FILE_PATH'):
+        raise ValueError('AREA_FILE_PATH is not set.')
     else:
-        area = config.AREA_GMLPATH
+        area = config.AREA_FILE_PATH
     
-    border = getattr(config, 'BORDER_GMLPATH', area)
+    border = getattr(config, 'BORDER_FILE_PATH', area)
     size = getattr(config, 'SIZE', (2000, 2000))
     
     options = {
