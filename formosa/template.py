@@ -38,6 +38,21 @@ def create(output, area, border=None, size=(2000, 2000), **options):
     if not os.path.isfile(border):
         raise FileNotFoundError(f'Border path is not a regular file: {border}')
     
+    if 'main' not in groups:
+        raise KeyError('`main` is required in groups')
+    
+    for key, g in groups.items():
+        if not isinstance(g, dict):
+            raise TypeError(f'`Group should be a dict: {key}')
+        
+        for field in ('display_name', 'position', 'size', 'border', 'skip'):
+            if field not in g:
+                raise KeyError(f'`{field}` is missing from group: {key}')
+    
+    for func, key in assign_rules:
+        if key not in groups:
+            raise KeyError(f'Assign rule is missing from the groups: {key}')
+    
     dwg = svgwrite.Drawing(output, size=size, profile='tiny', debug=False)
 
     with open(stylesheet, 'r') as f:
