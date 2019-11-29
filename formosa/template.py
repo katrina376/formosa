@@ -82,10 +82,6 @@ def create(output, area, border=None, size=(2000, 2000), **options):
     for dst in border_districts:
         for coord in dst.coordinates:
             reassign_box_name = area_coords.get(coord, dst.box_name)
-            # specialization for Ludao and Lanyu;
-            # if the coords of the border of those two island,
-            # go to the island's box;
-            # else, stick to the original assign rule
             boxes.get(reassign_box_name).add_polygon(dst.code, coord, 'border')
 
     dwg.save()
