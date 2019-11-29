@@ -24,7 +24,7 @@ Generating SVG Taiwan maps and coloring them using Python 3.
 
 ### Generate a map with default settings
 
-```
+```python
 from formosa.template import create
 
 output = 'template.svg'
@@ -34,7 +34,7 @@ template.create(output, boundary_fp)
 
 ### Generate a map with Penghu, Kinmen, and Matsu in floating boxes
 
-```
+```python
 from formosa.template import create_from_obj
 
 class Config:
@@ -87,7 +87,7 @@ create_from_obj(output, Config)
 
 ### Render a template
 
-```
+```python
 from formosa.color import color
 
 template = 'template.svg'
@@ -103,10 +103,9 @@ color(by_rgb, template, 'color_by_rgb.svg', 'rgb')
 
 ### Render a template using Taiwan town codes ver.103
 
-```
+```python
 from formosa.color import color
 from formosa.utils.code import convert_TW103_to_MOI
-
 
 template = 'template.svg'
 
