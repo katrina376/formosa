@@ -4,15 +4,21 @@ color_syntax = {
     'name': '{}',
 }
 
-def color(data, path, output, mode='name', options={}):
+def color(data, path, output, mode='name', **options):
     color_lists = {}
 
     for d in data:
-        color = d['color']
-        code = d['code']
+        if isinstance(d, dict):
+            color = d.get('color')
+            code = d.get('code')
+        elif (isinstance(d, tuple) or isinstance(d, list)) and len(d) == 2:
+            code, color = d
+        else:
+            raise ValueError('Elements in data should be a dict, a list, or a tuple.')
+        
         if color not in color_lists:
-            color_lists.update({color: []})
-        color_lists[color].append(code)
+            color_lists.update({color: set()})
+        color_lists[color].add(code)
 
     with open(path, 'r') as f:
         template = f.read()
@@ -20,22 +26,22 @@ def color(data, path, output, mode='name', options={}):
     style_syntax = '{selectors} {{ fill: {color}; }}'
     mode = mode if mode in color_syntax else 'name'
     
-    extended_types = options.pop('extended_types', [])
+    extended = options.pop('extended_types', [])
     
-    if not (isinstance(extended_types, list) or isinstance(extended_types, tuple)):
-        raise TypeError('`extended_types` of `options` should be a list or a tuple.')
+    if not (isinstance(extended, list) or isinstance(extended, tuple)):
+        raise TypeError('`extended` of `options` should be a list or a tuple.')
     
-    all_types = ['.area', *extended_types]
+    all_types = ['.area', *extended]
     
     style = ''
     
-    for t in all_types:
-        if not isinstance(t, str):
-            raise TypeError('Element type "{}" should be a string instead of "{}".'.format(str(t), type(t)))
+    for type_ in all_types:
+        if not isinstance(type_, str):
+            raise TypeError(f'Element type "{type_}" should be a str')
         
         style += ' '.join([
             style_syntax.format(
-                selectors=','.join(['{}[code="{}"]'.format(t, c) for c in codes]),
+                selectors=','.join([f'{type_}[code="{c}"]' for c in codes]),
                 color=color_syntax[mode].format(color)
             )
             for color, codes in color_lists.items()
